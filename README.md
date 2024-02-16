@@ -6427,10 +6427,10 @@ Mac 文件夹搜索进入/etc/hosts
 
 static char *JailbrokenPathArr[] = {"/Applications/Cydia.app","/usr/sbin/sshd","/bin/bash","/etc/apt","/Library/MobileSubstrate","/User/Applications/"};
 
-@implementation iOSHookDetection  //实现函数
+@implementation iOSHookDetection  // implementation function
 
-#pragma mark - 越狱检测
-#pragma mark 使用NSFileManager通过检测一些越狱后的关键文件是否可以访问来判断是否越狱
+#pragma mark - Jailbreak Detection
+#pragma mark Use NSFileManager to determine if you're jailbroken by detecting if some key jailbroken files are accessible.
 + (BOOL)isJailbroken1{
     if(TARGET_IPHONE_SIMULATOR)return NO;
     for (int i = 0;i < sizeof(JailbrokenPathArr) / sizeof(char *);i++) {
@@ -6440,7 +6440,7 @@ static char *JailbrokenPathArr[] = {"/Applications/Cydia.app","/usr/sbin/sshd","
     }
     return NO;
 }
-#pragma mark 使用stat通过检测一些越狱后的关键文件是否可以访问来判断是否越狱
+#pragma mark Use stat to determine if you're jailbroken by checking if some key jailbroken files are accessible or not
 + (BOOL)isJailbroken2{
     
     if(TARGET_IPHONE_SIMULATOR)return NO;
@@ -6465,13 +6465,13 @@ static char *JailbrokenPathArr[] = {"/Applications/Cydia.app","/usr/sbin/sshd","
     return NO;
 }
 
-#pragma mark 通过环境变量DYLD_INSERT_LIBRARIES检测是否越狱
+#pragma mark Jailbreak detection via environment variable DYLD_INSERT_LIBRARIES
 + (BOOL)isJailbroken3{
     if(TARGET_IPHONE_SIMULATOR)return NO;
     return !(NULL == getenv("DYLD_INSERT_LIBRARIES"));
 }
 
-#pragma mark - 通过遍历dyld_image检测非法注入的动态库
+#pragma mark - Detecting illegally injected dynamic libraries by traversing dyld_image
 + (BOOL)isExternalLibs{
     if(TARGET_IPHONE_SIMULATOR)return NO;
     int dyld_count = _dyld_image_count();
@@ -6480,7 +6480,7 @@ static char *JailbrokenPathArr[] = {"/Applications/Cydia.app","/usr/sbin/sshd","
         NSString *res = [NSString stringWithUTF8String:imageName];
         if([res hasPrefix:@"/var/containers/Bundle/Application"]){
             if([res hasSuffix:@".dylib"]){
-                //这边还需要过滤掉自己项目中本身有的动态库
+                // Here you also need to filter out dynamic libraries that you have in your own project.
                 return YES;
             }
         }
@@ -6488,10 +6488,10 @@ static char *JailbrokenPathArr[] = {"/Applications/Cydia.app","/usr/sbin/sshd","
     return NO;
 }
 
-#pragma mark - 通过检测ipa中的embedded.mobileprovision中的我们打包Mac的公钥来确定是否签名被修改，但是需要注意的是此方法只适用于Ad Hoc或企业证书打包的情况，App Store上应用由苹果私钥统一打包，不存在embedded.mobileprovision文件
+#pragma mark - By detecting the public key of our packaged Mac in the embedded.mobileprovision in ipa to determine whether the signature has been modified, but it should be noted that this method is only applicable to the case of Ad Hoc or enterprise certificate packaging, the App Store apps by Apple's private key unified packaging, there is no embedded. mobileprovision files
 + (BOOL)isLegalPublicKey:(NSString *)publicKey{
     if(TARGET_IPHONE_SIMULATOR)return YES;
-    //来源于https://www.jianshu.com/p/a3fc10c70a29
+    // from https://www.jianshu.com/p/a3fc10c70a29
     NSString *embeddedPath = [[NSBundle mainBundle] pathForResource:@"embedded" ofType:@"mobileprovision"];
     NSString *embeddedProvisioning = [NSString stringWithContentsOfFile:embeddedPath encoding:NSASCIIStringEncoding error:nil];
     NSArray *embeddedProvisioningLines = [embeddedProvisioning componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
