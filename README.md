@@ -4248,7 +4248,7 @@ if __name__ == '__main__':
     sys.exit(exit_code)
 ```
 
-## 屏蔽越狱检测脚本
+## Blocking Jailbreak Detection Scripts
 ```
 function bypassJailbreakDetection() {
 	try {
@@ -4279,7 +4279,7 @@ if (ObjC.available) {
 }
 ```
 
-## 反iOS越狱检测
+## Anti-iOS Jailbreak Detection
 ```
 #import <UIKit/UIKit.h>
 #import <sys/stat.h>
@@ -4299,8 +4299,8 @@ static char *JbPaths[] = {"/Applications/Cydia.app",
     "/Library/MobileSubstrate",
     "/User/Applications/"};
 
-static NSSet *sDylibSet ; // 需要检测的动态库
-static BOOL SCHECK_USER = NO; /// 检测是否越狱
+static NSSet *sDylibSet ; // Dynamic libraries to be tested
+static BOOL SCHECK_USER = NO; /// Detecting Jailbreak
 
 @implementation UserCust
 
@@ -4333,24 +4333,24 @@ static BOOL SCHECK_USER = NO; /// 检测是否越狱
     return sharedInstance;
 }
 
-// 监听image加载，从这里判断动态库是否加载，因为其他的检测动态库的方案会被hook
+// Listens for image loading, and determines if a dynamic library is loaded from here, because other solutions for detecting dynamic libraries will be hooked.
 static void _check_image(const struct mach_header *header,
                                       intptr_t slide) {
   // hook Image load
   if (SCHECK_USER) {
-    // 检测后就不在检测
+    // Tested and then not tested
     return;
   }
 
-  // 检测的lib
+  // Detected lib
   Dl_info info;
-  // 0表示加载失败了，这里大概率是被hook导致的
+  // 0 means that the loading has failed, it is likely to be caused by the hook here.
   if (dladdr(header, &info) == 0) {
     char *dlerro = dlerror();
-    // 获取失败了 但是返回了dli_fname, 说明被人hook了，目前看的方案都是直接返回0来绕过的
+    // Failed to get it, but returned dli_fname, which means it's been hacked, and all the solutions we've looked at so far just return 0 to get around it.
     if(dlerro == NULL && info.dli_fname != NULL) {
       NSString *libName = [NSString stringWithUTF8String:info.dli_fname];
-      // 判断有没有在动态列表里面
+      // Determine if there is a dynamic list
       if ([sDylibSet containsObject:libName]) {
         SCHECK_USER = YES;
       }
@@ -4360,7 +4360,7 @@ static void _check_image(const struct mach_header *header,
 }
 
 
-// 越狱检测
+// Jailbreak Detection
 - (BOOL)UVItinitse {
   
     if (SCHECK_USER) {
@@ -4421,8 +4421,8 @@ BOOL canOpen(NSString* path)
     return YES;
 }
 
-#pragma mark 使用NSFileManager通过检测一些越狱后的关键文件是否可以访问来判断是否越狱
-// 检测越狱
+#pragma mark Use NSFileManager to determine if you're jailbroken by detecting if some key jailbroken files are accessible.
+// Detecting Jailbreaks
 BOOL JCheckKuyt()
 {
     
@@ -4513,7 +4513,7 @@ BOOL JCheckKuyt()
     }
 
   
-//     check has class only used in breakJail like HBPreferences. 越狱常用的类，这里无法绕过，只要多找一些特征类就可以，注意，很多反越狱插件会混淆，所以可能要通过查关键方法来识别
+// check has class only used in jailbreak like SBSettings. The classes commonly used for jailbreaking can't be bypassed here, just look for more feature classes, note that many anti-jailbreak plugins can be confusing, so you may have to identify them by looking up key methods
     NSArray *checksClass = [[NSArray alloc] initWithObjects:@"HBPreferences",nil];
     for(NSString *className in checksClass)
     {
@@ -4522,7 +4522,7 @@ BOOL JCheckKuyt()
       }
     }
   
-//    Check permission to write to /private hook FileManager 和 writeToFile来绕过
+//    Check permission to write to /private hook FileManager and writeToFile to bypass
     NSString *path = @"/private/avl.txt";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     @try {
@@ -4568,14 +4568,14 @@ BOOL isInjectedWithDynamicLibrary()
     return NO;
 }
 
-#pragma mark 通过环境变量DYLD_INSERT_LIBRARIES检测是否越狱
+#pragma mark Jailbreak detection via environment variable DYLD_INSERT_LIBRARIES
 BOOL dyldEnvironmentVariables ()
 {
     if(TARGET_IPHONE_SIMULATOR)return NO;
     return !(NULL == getenv("DYLD_INSERT_LIBRARIES"));
 }
 
-#pragma mark 校验当前进程是否为调试模式，hook sysctl方法可以绕过
+#pragma mark Verify that the current process is in debug mode, the hook sysctl method can be bypassed.
 // Returns true if the current process is being debugged (either
 // running under the debugger or has a debugger attached post facto).
 // Thanks to https://developer.apple.com/library/archive/qa/qa1361/_index.html
@@ -4596,7 +4596,7 @@ BOOL isDebugged()
     return ( (info.kp_proc.p_flag & P_TRACED) != 0 );
 }
 
-#pragma mark 使用stat通过检测一些越狱后的关键文件是否可以访问来判断是否越狱，hook stat 方法和dladdr可以绕过
+#pragma mark Use stat to determine if you are jailbroken by checking if some key files are accessible after the jailbreak, the hook stat method and dladdr can be bypassed.
 BOOL isStatNotSystemLib() {
     if(TARGET_IPHONE_SIMULATOR)return NO;
     int ret ;
@@ -4625,7 +4625,7 @@ typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);
 #define PT_DENY_ATTACH 31
 #endif
 
-// 禁止gdb调试
+// Disable gdb debugging
 - (void) disable_gdb {
     if(TARGET_IPHONE_SIMULATOR)return;
     void* handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);
