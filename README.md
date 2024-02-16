@@ -344,92 +344,89 @@ static void kreadbuf(uint64_t kaddr, void* output, size_t size)
 
 ```
 
-## iOS或iPadOS 15.0-15.1.1的A12-A15芯片设备 XinaA15越狱工具
-这是xina520越狱（临时）的官方下载网站 https://discord.gg/vFpnTUSD4H
+## XinaA15 Jailbreak Tool for A12-A15 Chip Devices with iOS or iPadOS 15.0-15.1.1
+This is the official download site for the xina520 jailbreak (temporary)  https://discord.gg/vFpnTUSD4H
 
-工具下载: [xina520越狱下载](https://github.com/jacksight/xina520_official_jailbreak)
+download: [xina520越狱下载](https://github.com/jacksight/xina520_official_jailbreak)
 
-## iOS APP运行 编译过程及库
-在分析app启动之前，我们需要先了解iOSapp代码的编译过程以及动态库和静态库。
+## iOS APP RUNNING
+Compilation process and libraries.
+Before analyzing the app launch, we need to understand the compilation process of the iOS app code and the dynamic and static libraries.
 
-其中编译过程如下图所示，主要分为以下几步：
+Where the compilation process is shown below and is divided into the following steps:
 
-源文件：载入.h、.m、.cpp等文件
+Source files: load .h, .m, .cpp, etc.
 
-预处理：替换宏，删除注释，展开头文件，产生.i文件
+Preprocessing: replacing macros, removing comments, expanding headers, generating .i files
 
-编译：将.i文件转换为汇编语言，产生.s文件
+Compile: Converts .i files to assembly language, producing .s files
 
-汇编：将汇编文件转换为机器码文件，产生.o文件
+Assembly: converts assembly files to machine code files, producing .o files
 
-链接：对.o文件中引用其他库的地方进行引用，生成最后的可执行文件
+Linking: make references to other libraries in the .o file to generate the final executable file
 
-dyld加载流程分析
-根据dyld源码，以及libobjc、libSystem、libdispatch源码协同分析
+Analysis of dyld loading process
+Collaborative analysis based on dyld source code, as well as libobjc, libSystem, libdispatch source code
 
-什么是dyld？
+What is dyld?
 
-dyld（the dynamic link editor）是苹果的动态链接器，是苹果操作系统的重要组成部分，
-在app被编译打包成可执行文件格式的Mach-O文件后，交由dyld负责连接，加载程序
+dyld (the dynamic link editor) is Apple's dynamic linker, which is an important part of Apple's operating system. After an app is compiled and packaged into a Mach-O file in executable format, dyld is responsible for connecting to and loading the program.
 
 # ========| 微信公众号Cydiapps |========
 # ========| XLsn0w博客文章 |========
 
-## iOS重签名.dylib动态库
+## iOS re-signing .dylib dynamic library
 
-1）让可执行文件链接动态库
+1) Let executables link dynamic libraries
 
-可执行文件是不会主动启用自定义动态库，所以需要注入.dylib
+The executable does not actively enable custom dynamic libraries, so you need to inject the .dylib
 
-insert_dylib @executable_path/[动态库名称] [可执行文件名称] --all-yes --weak [新可执行文件名称]
+insert_dylib @executable_path/[dynamic_library_name] [executable_name] --all-yes --weak [new_executable_name]
 
+insert_dylib : path to load dynamic libraries
 
-insert_dylib ：动态库加载路径
+--all-yes: all subsequent selections are yes
+--weak: no error even if the dynamic library is not found.
 
---all-yes：后面所有的选择都为yes
+The essence of insert_dylib is to add the following to the Load Commands in the Mach-O file
 
---weak：即使动态库找不到也不会报错
+Added an LC_LOAD_DYLIB active LC_LOAD_WEAK_DYLIB.
 
-insert_dylib的本质是往Mach-O文件的Load Commands中
+The dynamic library dependencies of Mach-O can be viewed via otool
 
-添加了一个LC_LOAD_DYLIB活LC_LOAD_WEAK_DYLIB。
+otool -L Mach-O files
 
-可以通过otool查看Mach-O的动态库依赖信息
+2) Modify the path of CydiaSubstrate file
 
-otool -L Mach-O文件
+View dependencies for dynamic library (ResignTweak.dylib)
 
+You can see that the path to CydiaSubstrate that ResignTweak.dylib depends on is /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate.
 
-2）修改CydiaSubstrate文件路径
+Modify CydiaSubstrate path
 
-查看动态库(ResignTweak.dylib)的依赖库
+The CydiaSubstrate path has been changed, so it needs to be modified.
 
-可以看到ResignTweak.dylib依赖的CydiaSubstrate路径为/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate。
+install_name_tool -change [original path] @loader_path/CydiaSubstrate [name of dynamic library]
 
-
-修改CydiaSubstrate路径
-
-因CydiaSubstrate路径变更，所以需要对它进行修改。
-
-install_name_tool -change [原路径] @loader_path/CydiaSubstrate [动态库名称]
-
-
-再次执行otool -L ResignTweak.dylib查看，可以看出CydiaSubstrate路径已经修改了。
+Run otool -L ResignTweak.dylib again to see that the CydiaSubstrate path has been modified.
 
 3）对动态库和CydiaSubstrate文件重签名
 
 codesign -fs [证书id] [文件名称]
 
+4) Re-sign the APP package and install the verification
 
-4）对APP包重签名并安装验证
+## ra1ncloud Fugu15 Imperfect Jailbreak Tool
 
-## ra1ncloud Fugu15 不完美越狱工具
 https://github.com/iarchiveml/ra1ncloud
 
-## iOS巨魔盒子
-iOS巨魔盒子下载: https://share.weiyun.com/VdSYtnBm
-就个人而言，我喜欢将所有内容整合在一起的应用程序的想法。这意味着我的主屏幕上的混乱更少，并且在单个应用程序中发生更多事情。
+## iOS troll box
 
-请注意，TrollBox仅适用于TrollStore，因此它仅支持支持TrollStore（越狱与否）的设备，即运行iOS或iPadOS 14.0-15.4.1（以及一些15.5测试版）的设备。
+iOS Trollbox Download: https://share.weiyun.com/VdSYtnBm
+
+Personally, I like the idea of an app that brings everything together. This means less clutter on my home screen and more things happening in a single app.
+
+Please note that TrollBox only works with the TrollStore, so it only supports devices that support the TrollStore (jailbroken or not), i.e., devices running iOS or iPadOS 14.0-15.4.1 (and some 15.5 beta versions).
 
 # RootHide Dopamine Jailbreak  屏蔽越狱检测 越狱工具
 下载: https://github.com/RootHide/Dopamine-roothide
@@ -456,27 +453,32 @@ ESign轻松签+iOS安装教程
 
 TrollStore版本1.5.0 更新功能：
 
-–加高深设置选项卡，其中包含在已安装和自定义卸载方法
-之间切换的功能 - 将Idid更新与TrollStore更新分开;最新的 Idid 更新解决了 TrollStore 以前需要破解解决方法的错误，并且该解决方法现已删除
-– 如果尚未安装或安装的版本太过时，Idid 现在将在启动 TrollStore 时自动安装和/或更新，无法正确
-使用它 – 修复了卸载某些应用程序会失败
-的问题 – 自动使重新加载图标缓存按钮修复了一个股票 iOS 问题，其中臃肿的图标缓存可能导致应用程序安装和更新导致严重的系统范围滞后峰值 – 修复了应用程序插件的组容器可能被错误注册
-的错误
-– 切换到 TrollStore 自己的 CoreTrust 证书，以支持以前值得做得不好的证书
+-Advanced Settings tab, which contains the uninstallation methods in Installed and Customized
 
-##  边店SideStore自签名IPA工具
+Functionality to switch between - Separate Idid updates from TrollStore updates; the latest Idid update resolves a bug in TrollStore that previously required a hacked workaround, which has now been removed!
 
-软件官网下载: https://sidestore.io/
+- If not already installed or if the installed version is too outdated, Idid will now automatically install and/or update the TrollStore when it is started and will not be able to correctly
 
-# simctl Xcode模拟器命令行管理工具
+Use It - Fixed uninstallation of some apps failing
 
-simctl类似于安卓的adb命令非常相似。
+issue - Automatically made the Reload Icon Cache button fix a stock iOS issue where bloated icon caches could cause app installs and updates to cause severe system-wide lag spikes - Fixed app plugin group containers that could be incorrectly registered
 
-虽然苹果官方文档没有对它进行任何说明。但是我们可以通过Applications/Xcode.app/Contents/Developer/usr/bin/simctl路径找到它。
+bugs
 
-由于是XCode内置的命令，所以在使用的时候要在该命令前面加上xcrun。我们可以通过以下命令来查看该命令所有的功能选项。
+- Switch to TrollStore's own CoreTrust certificates to support previous certificates that deserve to do poorly
 
-Xcode15 官网下载 iOS_17_Simulator_Runtime.dmg 后 手动添加模拟器SDK
+## SideStore Self-Signing IPA Tools
+
+Download the official website of the software: https://sidestore.io/
+
+# simctl Xcode emulator command line management tool
+
+The simctl analog is very similar to the android adb command.
+Although the official Apple documentation doesn't say anything about it. But we can find it via the Applications/Xcode.app/Contents/Developer/usr/bin/simctl path.
+
+Since it is a built-in command in XCode, it should be used with xcrun in front of it. we can see all the options of this command with the following command.
+
+After downloading iOS_17_Simulator_Runtime.dmg from the Xcode15 website, manually add the simulator SDK.
 ```
 sudo xcode-select -s /Applications/Xcode.app
 Password:
@@ -486,47 +488,24 @@ D: 432C1CED-ADBC-45F7-A7C8-A3A8FF031397 iOS (17.0.1 - 21A342) (Ready)
 ```
 
 
-## iOS汇编概述
+## iOS assembly overview
 
+A programming language that uses mnemonics instead of machine instructions.
+Assembly and machine instructions are one-to-one correspondence, get the binary and disassemble it since assembly and CPU instruction sets correspond, assembly is not portable
 
-使用助记符代替机器指令的一种编程语言
+2.Bus: is a collection of wires from a bunch of wires
 
+Address bus: its width determines the addressing capability
+Data bus: its width determines the CPU data throughput
+Control bus: its width determines the CPU's ability to control other devices
 
-汇编和机器指令是一一对应的关系，拿到二进制就可以反汇编
+3. Progressions
 
+An arbitrary system consists of a number of symbols, which can be customized.
 
-由于汇编和CPU的指令集是对应的，所以汇编不具备移植性
-
-
-
-
-2、总线：是由一堆导线的集合
-
-
-地址总线：其宽度决定了寻址能力
-
-
-数据总线：其宽度决定了CPU数据的吞吐量
-
-
-控制总线：其宽度决定了CPU对其他器件的控制能力
-
-
-
-
-3、进制
-
-
-任意进制都是由对应个数的符号组成的，符号可以自定义
-
-
-2/8/16是相对完美的进制，他们之间的关系
-
-
-3个二进制 使用一个8进制标识
-
-
-4个二进制 使用一个16进制标识
+2/8/16 is a relatively perfect progression between them
+3 binary using an octal identifier.
+4 binary using a hexadecimal identifier.
 
 
 两个16进制可以标识一个字节，即8位
