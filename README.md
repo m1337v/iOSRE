@@ -1,28 +1,4 @@
-# iOS应用逆向工程-Cydia越狱-Tweaks插件开发  
-
-# 我的微信公众号-> Cydiapps
-
-### XLsn0w's Cydia Repo: https://XLsn0w.github.io/tweak/
-### XLsn0w's Cydia Repo: https://XLsn0w.github.io/tweaks/
-### Cydiapp's Cydia Repo: https://XLsn0w.github.io/Cydiapp/
-
-## 🔥🔥🔥 我的博客: https://xlsn0w.github.io 🔥🔥🔥
-![](https://github.com/XLsn0w/XLsn0w.github.io/blob/master/favicons/blog.png?raw=true)
-
-Welcome to XLsn0w’s Blog.
-
-Apple  Developer iPhone  Hacker
-
-我的Github-> https://github.com/XLsn0w
-
-# 我的微信公众号-> Cydiapps
-我的微信公众号-> Cydiapps
-
-# 我的个人博客-> https://xlsn0w.github.io
-
-## 我的简书-> http://www.jianshu.com/u/eacc1a5d2fda
-
-![tease](https://github.com/XLsn0w/XLsn0w.github.io/blob/master/favicons/tease.gif?raw=true)
+# iOS App Reverse Engineering - Cydia Jailbreak - Tweaks Plugin Development  
 
 ```
 //                            _ooOoo_
@@ -45,48 +21,36 @@ Apple  Developer iPhone  Hacker
 //                            `=---='
 //
 //         .............................................
-//                  佛祖镇楼            逆向寻根
-//          佛曰:
-//                  写字楼里写字间，写字间里程序员；
-//                  程序人员写程序，又拿程序换酒钱。
-//                  酒醒只在网上坐，酒醉还来网下眠；
-//                  酒醉酒醒日复日，网上网下年复年。
-//                  但愿老死电脑间，不愿鞠躬老板前；
-//                  奔驰宝马贵者趣，公交自行程序员。
-//                  别人笑我忒疯癫，我笑自己命太贱；
-//                  不见满街漂亮妹，哪个归得程序员？
+// The Buddha's Townhouse Reverse Roots
+// Buddha said.
+// Office in an office building, office in a programmer;
+// Programmers write programs and trade them for booze money.
+// Sober only sits on the internet, drunk still comes to sleep off the internet;
+// Drunk and sober day after day, online and offline year after year.
+// I wish to die an old man's death in a computer room, not in front of a boss;
+// Mercedes-Benz and BMW are fun for the expensive ones, and public transportation is a programmer on its own.
+// People laugh at me for being crazy, but I laugh at myself for being too cheap;
+// What's a programmer if you don't see a pretty girl on the street?
 ```
-
 # iOS Jailbreak Develop + iPhone App Reverse 
-# 我的微信公众号: Cydiapps
+# Mac computers Modify hosts file to access Github
 
-### XLsn0w's Cydia Repo: https://XLsn0w.github.io/tweak/
+1. Open https://ping.chinaz.com/ and search github.com
+2. find a fast ip address. i'm looking for a fast ip address here.
 
-### XLsn0w's Cydia Repo: https://XLsn0w.github.io/tweaks/
+Germany 140.82.121.4 Seattle, Washington, USA GitHub <1ms
 
-<img src="https://github.com/XLsn0w/Cydiapp/blob/main/XLsn0w's%20Cydia%20Repo.png?raw=true" alt="XLsn0w" width="470" height="224" align="bottom" />
-
-# Mac电脑 修改hosts文件 以访问Github
-
-1. 打开 https://ping.chinaz.com/ 搜索github.com
-
-2. 找一个快的ip地址 我这里找的是
-
-德国   140.82.121.4  美国华盛顿西雅图 GitHub    <1ms
-
-打开终端，输入命令
+Open a terminal and enter the command
 
 sudo vi /etc/hosts
-输入密码后，使用vi编辑hosts文件：增加
 
-140.82.121.4 github.com (相当于访问github.com 切换成 140.82.121.4)
+After entering the password, use vi to edit the hosts file: add the
 
+140.82.121.4 github.com (equivalent to visiting github.com and switching to 140.82.121.4)
 
-1) 按i进入编辑模式，开始编辑
-
-2) 编辑完成后按esc退出
-   
-3) 再按:wq回车保存
+1) Press i to enter edit mode and start editing
+2) Press esc to exit after editing
+3) Press :wq again to save.
 
 # iOS16 Bootstrap 半越狱工具
 Bootstrap 官方地址：
@@ -98,43 +62,9 @@ https://github.com/roothide/Bootstrap/releases
 # iOS巨魔商店 利用的漏洞
 https://github.com/advisories/GHSA-fj3m-2r8f-m4x9
 
-Description
-A certificate validation issue was addressed. This issue is fixed in iOS 16.7 and iPadOS 16.7, OS 17.0.1 and iPadOS 17.0.1, watchOS 9.6.3, macOS Ventura 13.6, watchOS 10.0.1. A malicious app may be able to bypass signature validation. Apple is aware of a report that this issue may have been actively exploited against versions of iOS before iOS 16.7.
+# iOS Trollstore
 
-References
-
-https://nvd.nist.gov/vuln/detail/CVE-2023-41991
-
-https://support.apple.com/en-us/HT213926
-
-https://support.apple.com/en-us/HT213927
-
-https://support.apple.com/en-us/HT213928
-
-https://support.apple.com/en-us/HT213929
-
-https://support.apple.com/en-us/HT213931
-
-https://support.apple.com/kb/HT213926
-
-http://seclists.org/fulldisclosure/2023/Sep/14
-
-http://seclists.org/fulldisclosure/2023/Sep/15
-
-http://seclists.org/fulldisclosure/2023/Sep/16
-
-http://seclists.org/fulldisclosure/2023/Sep/17
-
-http://seclists.org/fulldisclosure/2023/Sep/19
-
-http://seclists.org/fulldisclosure/2023/Oct/5
-
-
-# iOS巨魔二代发布了
-
-安装包下载: https://github.com/opa334/TrollStore/releases
-
-有问题可以 联系公众号Cydiapps
+download: https://github.com/opa334/TrollStore/releases
 
 # iOS巨魔V2.0 安装指南 TrollStore 二代
 ![](https://mmbiz.qpic.cn/mmbiz_png/CqwzFPUx3cud7OvxDicIWBuNNtBsBRYcmlhwlIicibo0P9ia82gcL3GjQqHicFfe8tANSAmKE7vHdvNa5ibfeib6bRuog/640?wx_fmt=png&from=appmsg&wxfrom=5&wx_lazy=1&wx_co=1)
